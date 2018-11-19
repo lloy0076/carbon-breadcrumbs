@@ -10,6 +10,7 @@ class Carbon_Breadcrumb_Item_Post extends Carbon_Breadcrumb_Item_DB_Object {
 	 * Configure the title and link URL by using the specified post ID.
 	 *
 	 * @access public
+     * @throws \Carbon_Breadcrumb_Exception
 	 */
 	public function setup() {
 		// in order to continue, post ID must be specified
@@ -27,7 +28,13 @@ class Carbon_Breadcrumb_Item_Post extends Carbon_Breadcrumb_Item_DB_Object {
 	 */
 	public function setup_title() {
 		$title = get_post_field( 'post_title', $this->get_id() );
-		$title = apply_filters( 'the_title', $title );
+
+		/*
+		 * WC_Template_Loader::unsupported_theme_title_filter()
+		 *
+		 * This requires two arguments, the second of which should be the post ID.
+		 */
+		$title = apply_filters( 'the_title', $title, $this->get_id() );
 		$this->set_title( $title );
 	}
 
